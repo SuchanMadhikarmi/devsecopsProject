@@ -27,7 +27,7 @@ spec:
                 name: frontend-svc
                 port:
                   number: 80
-    - host: suchanmadhikarmi.xyz
+    - host: www.suchanmadhikarmi.xyz
       http:
         paths:
           - path: /api
