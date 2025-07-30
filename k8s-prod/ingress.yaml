@@ -48,4 +48,4 @@ spec:
     - hosts:
         - suchanmadhikarmi.xyz
         - www.suchanmadhikarmi.xyz
-      secretName: adityajaiswal-co-tls
+      secretName: suchanmadhikarmi-co-tls
