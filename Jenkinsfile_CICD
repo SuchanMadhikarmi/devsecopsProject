@@ -1,4 +1,3 @@
-
 pipeline {
     agent any
     
@@ -12,7 +11,7 @@ pipeline {
     stages {
         stage('Git Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/jaiswaladi246/3-Tier-DevSecOps-Mega-Project.git'
+                git branch: 'main', url: 'https://github.com/SuchanMadhikarmi/devsecopsProject.git'
             }
         }
         
@@ -65,10 +64,9 @@ pipeline {
                 script {
                     withDockerRegistry(credentialsId: 'docker-cred') {
                         dir('api') {
-                            sh 'docker build -t adijaiswal/backend:latest .'
-                            sh 'trivy image --format table -o backend-image-report.html adijaiswal/backend:latest '
-                            sh 'docker push adijaiswal/backend:latest'
-                           
+                            sh 'docker build -t suchanmadhikarmi/backend:latest .'
+                            sh 'trivy image --format table -o backend-image-report.html suchanmadhikarmi/backend:latest'
+                            sh 'docker push suchanmadhikarmi/backend:latest'
                         }
                     }
                 }
@@ -80,14 +78,13 @@ pipeline {
                 script {
                     withDockerRegistry(credentialsId: 'docker-cred') {
                         dir('client') {
-                            sh 'docker build -t adijaiswal/frontend:latest .'
-                            sh 'trivy image --format table -o frontend-image-report.html adijaiswal/frontend:latest '
-                            sh 'docker push adijaiswal/frontend:latest'
+                            sh 'docker build -t suchanmadhikarmi/frontend:latest .'
+                            sh 'trivy image --format table -o frontend-image-report.html suchanmadhikarmi/frontend:latest'
+                            sh 'docker push suchanmadhikarmi/frontend:latest'
                         }
                     }
                 }
             }
-             
         }  
         
         stage('Manual Approval for Production') {
@@ -98,7 +95,7 @@ pipeline {
             }
         }
         
-       stage('Deployment To Prod') {
+        stage('Deployment To Prod') {
             steps {
                 script {
                     withKubeConfig(caCertificate: '', clusterName: 'devopsshack-cluster', contextName: '', credentialsId: 'k8-prod-token', namespace: 'prod', restrictKubeConfigAccess: false, serverUrl: 'https://AFC6FCFF5360B30D5E8950396E38A8C4.gr7.ap-south-1.eks.amazonaws.com') {
@@ -121,12 +118,10 @@ pipeline {
                     withKubeConfig(caCertificate: '', clusterName: 'devopsshack-cluster', contextName: '', credentialsId: 'k8-prod-token', namespace: 'prod', restrictKubeConfigAccess: false, serverUrl: 'https://AFC6FCFF5360B30D5E8950396E38A8C4.gr7.ap-south-1.eks.amazonaws.com') {
                         sh 'kubectl get pods -n prod'
                         sleep 20
-                         sh 'kubectl get ingress -n prod'
-                        
+                        sh 'kubectl get ingress -n prod'
                     }
                 }
             }
         }
-            
     }
 }
